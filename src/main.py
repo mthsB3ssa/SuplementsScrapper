@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import os
 import requests
 from twilio.rest import Client
 import time
@@ -11,9 +12,11 @@ df = pd.read_csv(url)
 for line in df["Links"]:
     print(line)
 
- 
-account_sid = "AC9b8421bb6ad1109c913574e24061f16c"
-auth_token = "a14dab73e38e4a41ff20080850ada7d9"
+account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+
+from_phone = os.getenv('TWILIO_FROM_PHONE')
+to_phone = os.getenv('TO_PHONE')
 
 def check_creatina():
     url = "https://www.gsuplementos.com.br/creatina-250g-creapure-growth-supplements-p985824?busca=creatina"
@@ -31,8 +34,8 @@ def check_creatina():
         message = client.messages \
                     .create(
                             body="Creatina Disponível. Vem monstro",
-                            from_='+15075545862', #aqui entra o telefone do twilio
-                            to='+5561998698261' #aqui é o telefone para onde vai a mensagem
+                            from_=from_phone,
+                            to=to_phone
                         )
         print(message.status)
 
